@@ -1,14 +1,26 @@
 import json
-from flask import Flask, jsonify, render_template 
+from flask import Flask, jsonify, render_template, request
 from markupsafe import escape
 
+from main import getMovies
 
-app = Flask(__name__) 
 
-@app.route('/')
+app = Flask(__name__)
+
+
+@app.route("/")
 def home():
     return render_template("mainpage.html")
 
-@app.route("/<username>")  # pyright: ignore[reportArgumentType]
-def getmoviedata(username):
-    return jsonify({"username": "happy"})
+
+@app.get("/getmoviedata")
+def getmoviedata():
+    username = request.args.get("username")
+    if username:
+        result = getMovies(username)
+        if result != None:
+            return jsonify(result)
+        else:
+            return jsonify({"status": "error", "message": "username not found"}), 400
+    else:
+        return jsonify({"status": "error", "message": "username is required"}), 400
