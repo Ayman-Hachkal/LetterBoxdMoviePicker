@@ -34,14 +34,21 @@ async function pickMovie() {
     const rating = document.getElementById('ratingSelect').value;
     let list_of_possible_movies = [];
     for (let i = 0; i < movies.length; i++) {
-      var genres = movies[i].Genre.split(", ");
+      console.log(movies[i].Genre);
+      let genres;
+      if (movies[i].Genre != null) {
+        genres = movies[i].Genre.split(", ");
+      }
+      else {
+        genres = [];
+      }
       const movieRating = Number(movies[i].imdbRating);
       if ((genres.includes(genre) || genre == "All") 
           && (movieRating >= Number(rating) || rating == "All")) {
         list_of_possible_movies.push(movies[i]);
       }
     }
-    const movieIndex = Math.floor(Math.random() * (list_of_possible_movies.length + 1));
+    const movieIndex = Math.floor(Math.random() * (list_of_possible_movies.length));
     const chosenMovie = list_of_possible_movies[movieIndex];
 
     document.getElementById('poster').src = chosenMovie.Poster;
