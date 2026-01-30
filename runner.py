@@ -18,10 +18,12 @@ def home():
 def getmoviedata():
     username = request.args.get("username")
     if username:
-        result = asyncio.run(getMovies(username))
-        if result != None:
+        result, status = asyncio.run(getMovies(username))
+        if result != None and status == 200:
             return jsonify(result)
+        elif status == 429:
+            return jsonify({"message": f"retry in {result[0]}"}), 429
         else:
-            return jsonify({"status": "error", "message": "username not found"}), 400
+            return jsonify({"status": "error", "message": "something went wrong"}), 400
     else:
         return jsonify({"status": "error", "message": "username is required"}), 400

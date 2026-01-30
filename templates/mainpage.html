@@ -3,57 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>LetterBoxd Picker</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}"
 </head>
 <body>
-  <div id="movieinfo" hidden>
-    <img id="poster" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlSKgC1uzbi2-7ObpSfZdcxLHrvLVUVRF5cQ&s" alt"">
-    <p id="movie-name"></p>
-    <p id="movie-genre"></p>
-    <p id="movie-length"></p>
-    <p id="movie-rating"></p>
+  <div id="container">
+    <img id="img-logo" src="https://a.ltrbxd.com/logos/letterboxd-logo-h-neg-rgb-1000px.png">
+    <p>Enter your username to get a random movie from your watchlsit!</p>
+
+    <div id="heart-progress">
+      <svg xmlns="http://www.w3.org/2000/svg" version="1.1" x="0px" y="0px" viewBox="0 0 100 100">
+      <path fill-opacity="0" stroke-width="1" stroke="#bbb" d="M81.495,13.923c-11.368-5.261-26.234-0.311-31.489,11.032C44.74,13.612,29.879,8.657,18.511,13.923  C6.402,19.539,0.613,33.883,10.175,50.804c6.792,12.04,18.826,21.111,39.831,37.379c20.993-16.268,33.033-25.344,39.819-37.379  C99.387,33.883,93.598,19.539,81.495,13.923z"/>
+      <path id="heart-path" fill-opacity="0" stroke-width="3" stroke="#ED6A5A" d="M81.495,13.923c-11.368-5.261-26.234-0.311-31.489,11.032C44.74,13.612,29.879,8.657,18.511,13.923  C6.402,19.539,0.613,33.883,10.175,50.804c6.792,12.04,18.826,21.111,39.831,37.379c20.993-16.268,33.033-25.344,39.819-37.379  C99.387,33.883,93.598,19.539,81.495,13.923z"/>
+      </svg>
+    </div>
+
+    <h2 id="error" hidden><h2>
+    
+    <div id="movieinfo" hidden>
+
+      <img id="poster" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlSKgC1uzbi2-7ObpSfZdcxLHrvLVUVRF5cQ&s" alt"">
+      <p id="movie-name"></p>
+      <p id="movie-genre"></p>
+      <p id="movie-length"></p>
+      <p id="movie-rating"></p>
+
+    </div>
+
+    <div id="forum">
+
+      <form id="formsubmit">
+        <input id="usernameInput" type="text" name="username" size=20>
+        <input id="FetchButton" type="button" name="Submit" value="Submit">
+      </form>
+
+      <form id="filter">
+
+        <p>Genre</p>
+        <select id="genreSelect" name=Genre default="All">
+          <option value="All">All</option>
+          <option value="Action">Action</option>
+          <option value="Adventure">Adventure</option>
+          <option value="Animation">Animation</option>
+          <option value="Biography">Biography</option>
+          <option value="Comedy">Comedy</option>
+          <option value="Crime">Crime</option>
+          <option value="Drama">Drama</option>
+          <option value="Family">Family</option>
+          <option value="Fantasy">Fantasy</option>
+          <option value="History">History</option>
+          <option value="Horror">Horror</option>
+          <option value="Music">Music</option>
+          <option value="Mystery">Mystery</option>
+          <option value="Romance">Romance</option>
+          <option value="Sci-Fi">Sci-Fi</option>
+          <option value="Thriller">Thriller</option>
+          <option value="War">War</option>
+          <option value="Western">Western</option>
+        </select>
+
+        <p>Ratings</p>
+        <select id="ratingSelect" name="Rating" default="All">
+          <option value="All">All</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+        </select>
+
+      </form>
+
+    </div>
   </div>
-  <div id="banner">
-    <img id="img-banner" src="ihttp://media.istockphoto.com/id/1150885361/photo/cat-karate-doing-exercises.jpg?s=612x612&w=0&k=20&c=ZVW8-NosD1y9bpiJpttBEedRvZ7Kx2vapwDrvNx4mPE=">
-  </div>
-  <form id="formsubmit">
-    <input id="usernameInput" type="text" name="username" size=100>
-    <select id="genreSelect" name=Genre default="All">
-      <option value="All">All</option>
-      <option value="Action">Action</option>
-      <option value="Adventure">Adventure</option>
-      <option value="Animation">Animation</option>
-      <option value="Biography">Biography</option>
-      <option value="Comedy">Comedy</option>
-      <option value="Crime">Crime</option>
-      <option value="Drama">Drama</option>
-      <option value="Family">Family</option>
-      <option value="Fantasy">Fantasy</option>
-      <option value="History">History</option>
-      <option value="Horror">Horror</option>
-      <option value="Music">Music</option>
-      <option value="Mystery">Mystery</option>
-      <option value="Romance">Romance</option>
-      <option value="Sci-Fi">Sci-Fi</option>
-      <option value="Thriller">Thriller</option>
-      <option value="War">War</option>
-      <option value="Western">Western</option>
-    </select>
-    <select id="ratingSelect" name="Rating" default="All">
-      <option value="All">All</option>
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="6">6</option>
-      <option value="7">7</option>
-      <option value="8">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
-    </select>
-    <input id="FetchButton" type="button" name="Submit" value="Submit">
-  </form>
+
+  <script src="{{ url_for('static', filename='node_modules/progressbar.js/dist/progressbar.js') }}"></script>
   <script src="{{ url_for('static', filename='mainscript.js')}}"></script>
+
+  <footer>
+    <p>Copyright © 2026 Para mi amor</p>
+  </footer>
 </body>
 </html>

@@ -1,7 +1,10 @@
 import asyncio
+import time
+from typing import Tuple
 from bs4 import BeautifulSoup
 import os
 from dotenv import load_dotenv
+from flask import jsonify
 import requests
 import httpx
 
@@ -23,53 +26,68 @@ async def getOMDBMovie(client, movie):
 
 
 
-async def getMovies(username : str):
+async def getMovies(username : str) -> Tuple[list, int]:
     url = "https://letterboxd.com/"
     end_url = "/watchlist/"
 
-    full_url = url + username + end_url
+    username = username.strip(' ')
+    usernames = username.split(",")
+
 
 
     list_of_films = []
     omdb_list = []
 
-    response = requests.get(full_url)
 
-    if response.status_code == 200:
-        html_content = response.text
-        soup = BeautifulSoup(html_content, "lxml")
-        list_films = soup.find_all("li", class_="griditem")
-        page_list = soup.find_all("li", class_="paginate-page")
-        for poster in list_films:
-            list_of_films.append(poster("div")[0]["data-item-full-display-name"])
+    for u in usernames:
+        full_url = url + u + end_url
+        response = requests.get(full_url)
+        if response.status_code == 200:
+            html_content = response.text
+            soup = BeautifulSoup(html_content, "lxml")
+            list_films = soup.find_all("li", class_="griditem")
+            page_list = soup.find_all("li", class_="paginate-page")
+            for poster in list_films:
+                list_of_films.append(poster("div")[0]["data-item-full-display-name"])
 
 
-        for pages in page_list:
-            a = pages.find("a")
-            if a != None:
-                print(a.get("href"))
-                full_url = url + str(a.get("href"))
+            for pages in page_list:
+                a = pages.find("a")
+                if a != None:
+                    print(a.get("href"))
+                    full_url = url + str(a.get("href"))
 
-                response = requests.get(full_url)
-                
-                if response.status_code == 200:
-                    html_content = response.text
-                    soup = BeautifulSoup(html_content, "lxml")
-                    list_films = soup.find_all("li", class_="griditem")
-                    for poster in list_films:
-                        list_of_films.append(poster("div")[0]["data-item-full-display-name"])
+                    response = requests.get(full_url)
+                    
+                    if response.status_code == 200:
+                        html_content = response.text
+                        soup = BeautifulSoup(html_content, "lxml")
+                        list_films = soup.find_all("li", class_="griditem")
+                        for poster in list_films:
+                            film = poster("div")[0]["data-item-full-display-name"]
+                            if film not in list_of_films:
+                                list_of_films.append(film)
 
-        async with httpx.AsyncClient() as client:
-            tasks = [getOMDBMovie(client, movie) for movie in list_of_films]
+                    else:
+                        print("Failed to fetch the page. ",  response.status_code)
+                        if response.status_code == 429:
+                            print("Retry in ", response.headers["Retry-After"])
+                            return [response.headers["Retry-After"]], 429
 
-            omdb_list = await asyncio.gather(*tasks)
+            async with httpx.AsyncClient() as client:
+                tasks = [getOMDBMovie(client, movie) for movie in list_of_films]
 
-        return omdb_list
+                omdb_list.append(await asyncio.gather(*tasks))
+
             
 
-    else:
-        print("Failed to fetch the page. ",  response.status_code)
-        if response.status_code == 429:
-            print("Retry in ", response.headers["Retry-After"])
+        else:
+            print("Failed to fetch the page. ",  response.status_code)
+            if response.status_code == 429:
+                print("Retry in ", response.headers["Retry-After"])
+                return [response.headers["Retry-After"]], 429
+
+
+    return omdb_list, 200
 
 
