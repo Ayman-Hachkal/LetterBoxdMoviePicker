@@ -1,21 +1,35 @@
-import random
+import asyncio
 from bs4 import BeautifulSoup
 import os
 from dotenv import load_dotenv
 import requests
+import httpx
+
+
+async def getOMDBMovie(client, movie):
+    load_dotenv()
+    API_KEY = os.getenv("API_KEY")
+    url_omdb = "http://www.omdbapi.com/"
+
+    name, year = movie.rsplit(' ', 1)
+    print(name)
+    year = year.strip('(').strip(')')
+
+    try: 
+        response = await client.get(url_omdb, params={"apikey": API_KEY, "t": name, "y": year})
+        return response.json() 
+    except Exception as e:
+        print(e)
 
 
 
-def getMovies(username : str):
+async def getMovies(username : str):
     url = "https://letterboxd.com/"
     end_url = "/watchlist/"
 
     full_url = url + username + end_url
 
-    load_dotenv()
-    API_KEY = os.getenv("API_KEY")
 
-    url_omdb = "http://www.omdbapi.com/"
     list_of_films = []
     omdb_list = []
 
@@ -45,21 +59,11 @@ def getMovies(username : str):
                     for poster in list_films:
                         list_of_films.append(poster("div")[0]["data-item-full-display-name"])
 
-        for i in list_of_films:
-            name, year = i.rsplit(' ', 1)
-            print(name)
-            year = year.strip('(').strip(')')
-            params = {
-                "apikey": API_KEY,
-                "t": name,
-                "y": year,
-                    }
-            response = requests.get(url_omdb, params=params)
-            if response.status_code == 200:
-                omdb_list.append(response.json())
+        async with httpx.AsyncClient() as client:
+            tasks = [getOMDBMovie(client, movie) for movie in list_of_films]
 
-            else:
-                print("Time out")
+            omdb_list = await asyncio.gather(*tasks)
+
         return omdb_list
             
 

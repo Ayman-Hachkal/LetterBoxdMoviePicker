@@ -1,3 +1,4 @@
+import asyncio
 import json
 from flask import Flask, jsonify, render_template, request
 from markupsafe import escape
@@ -17,7 +18,7 @@ def home():
 def getmoviedata():
     username = request.args.get("username")
     if username:
-        result = getMovies(username)
+        result = asyncio.run(getMovies(username))
         if result != None:
             return jsonify(result)
         else:
