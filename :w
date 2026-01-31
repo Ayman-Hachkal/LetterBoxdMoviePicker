@@ -16,22 +16,6 @@ body, html {
   height: 100%;
 }
 
-.select-text {
-  font-size: 1rem;
-  margin-top: 5px;
-  margin-bottom: 0px;
-}
-
-#container {
-  display: flex;
-  flex-direction: column;
-  justify-content: top middle;
-  align-items: center;
-  height: 100vh;
-}
-
-
-
 #heart-progress{
   display: flex;
   flex-direction: column;
@@ -60,13 +44,13 @@ body, html {
   display: flex;
   justify-content: center;
   gap: 0px;
-  height: 2rem;
+  height: 50px;
   color: var(--secondary);
 }
 
 #usernameInput {
   padding-left: 10px;
-  width: 15rem;
+  width: 20rem;
   font-size: 20px;
 }
 
@@ -75,7 +59,6 @@ body, html {
   padding: 0px;
   min-width: 30px;
   width: 10rem;
-  height: 2rem;
   font-size: 20px;
 }
 
@@ -88,19 +71,14 @@ body, html {
   flex-direction: column;
   justify-content: center;
   width: 10rem;
-}
-
-.filter-div {
-  gap: 0px;
+  margin: auto;
 }
 
 select {
   flex: 1;
   border: 2px solid var(--tertiary);
   background: var(--secondary);
-  padding: 2px;
-  height: 2rem;
-  width: 10rem;
+  padding: 10px;
   transition: 0.4s;
 }
 select:hover {
