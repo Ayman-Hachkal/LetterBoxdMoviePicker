@@ -27,6 +27,7 @@ async function fetchMovies() {
       console.log(result);
       movies = result[0];
       document.getElementById('movieinfo').hidden = false;
+      document.getElementById('movieinfo').style.display = 'flex';
       pickMovie();
     }
     else { 
@@ -63,9 +64,10 @@ async function pickMovie() {
     const chosenMovie = list_of_possible_movies[movieIndex];
 
     document.getElementById('poster').src = chosenMovie.Poster;
-    document.getElementById('movie-name').innerHTML = chosenMovie.Title;
+    document.getElementById('movie-title').innerHTML = chosenMovie.Title;
     document.getElementById('movie-genre').innerHTML = chosenMovie.Genre;
     document.getElementById('movie-rating').innerHTML = chosenMovie.imdbRating;
+    document.getElementById('movie-plot').innerHTML = chosenMovie.Plot;
     done = true;
   }
     

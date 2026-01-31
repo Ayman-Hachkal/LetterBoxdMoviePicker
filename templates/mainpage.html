@@ -22,11 +22,11 @@
     
     <div id="movieinfo" hidden>
 
-      <img id="poster" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlSKgC1uzbi2-7ObpSfZdcxLHrvLVUVRF5cQ&s" alt"">
-      <p id="movie-name"></p>
-      <p id="movie-genre"></p>
-      <p id="movie-length"></p>
-      <p id="movie-rating"></p>
+      <img id="poster" src="" alt"">
+      <p class="movie-subtext" id="movie-title"></p>
+      <p class="movie-subtext" id="movie-genre"></p>
+      <p class="movie-subtext" id="movie-rating"></p>
+      <p class="movie-subtext" id="movie-plot"></p>
 
     </div>
 
@@ -81,14 +81,13 @@
           </select>
         </div>
       </form>
+    <footer>
+      <p>Copyright © 2026 Para mi amor</p>
+    </footer>
     </div>
-  </div>
 
   <script src="{{ url_for('static', filename='node_modules/progressbar.js/dist/progressbar.js') }}"></script>
   <script src="{{ url_for('static', filename='mainscript.js')}}"></script>
 
-  <footer>
-    <p>Copyright © 2026 Para mi amor</p>
-  </footer>
 </body>
 </html>
